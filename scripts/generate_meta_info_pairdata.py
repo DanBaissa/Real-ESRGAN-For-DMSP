@@ -17,7 +17,7 @@ def main(args):
         img_name_gt = os.path.relpath(img_path_gt, args.root[0])
         img_name_lq = os.path.relpath(img_path_lq, args.root[1])
         print(f'{img_name_gt}, {img_name_lq}')
-        txt_file.write(f'{img_name_gt}, {img_name_lq}\n')
+        txt_file.write(f'{img_name_gt.replace(os.sep, "/")}, {img_name_lq.replace(os.sep, "/")}\n')
 
 
 if __name__ == '__main__':
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input',
         nargs='+',
-        default=['datasets/DF2K/DIV2K_train_HR_sub', 'datasets/DF2K/DIV2K_train_LR_bicubic_X4_sub'],
+        default=['datasets/DF2K/DIV2K_train_HR_sub/', 'datasets/DF2K/DIV2K_train_LR_bicubic_X4_sub/'],
         help='Input folder, should be [gt_folder, lq_folder]')
     parser.add_argument('--root', nargs='+', default=[None, None], help='Folder root, will use the ')
     parser.add_argument(

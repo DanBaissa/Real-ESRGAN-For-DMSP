@@ -35,7 +35,7 @@ class Predictor(BasePredictor):
             )
         if not os.path.exists('weights/GFPGANv1.4.pth'):
             os.system('wget https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth -P ./weights')
-        if not os.path.exists('weights/RealESRGAN_x4plus.pth'):
+        if not os.path.exists('weights/First_DMSP/RealESRGAN_x4plus.pth'):
             os.system(
                 'wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth -P ./weights'
             )
@@ -52,7 +52,7 @@ class Predictor(BasePredictor):
         half = True if torch.cuda.is_available() else False
         if version == 'General - RealESRGANplus':
             model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
-            model_path = 'weights/RealESRGAN_x4plus.pth'
+            model_path = 'weights/First_DMSP/RealESRGAN_x4plus.pth'
             self.upsampler = RealESRGANer(
                 scale=4, model_path=model_path, model=model, tile=tile, tile_pad=10, pre_pad=0, half=half)
         elif version == 'General - v3':

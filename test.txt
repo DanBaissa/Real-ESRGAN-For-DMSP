@@ -1,0 +1,9 @@
+python inference_realesrgan.py -n RealESRGAN_x4plus -i inputs
+
+python inference_realesrgan.py -n test -i inputs
+
+python Enhancer.py -m RealESRGAN_x4plus -i inputs
+
+python Enhancer.py -m DMSP-RealESRGAN_x4plus -i inputs
+
+python realesrgan/train.py -opt options/finetune_realesrgan_x4plus_pairdata.yml --auto_resume

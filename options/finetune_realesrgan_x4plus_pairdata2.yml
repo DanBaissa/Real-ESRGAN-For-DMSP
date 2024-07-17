@@ -1,6 +1,6 @@
 # general settings
 name: finetune_RealESRGANx4plus_400k_pairdata
-model_type: RealESRGANModel
+model_type: RealESRGANModel_basicsr
 scale: 4
 #num_gpu: auto
 num_gpu: 1
@@ -16,11 +16,11 @@ high_order_degradation: False # do not use the high-order degradation generation
 # dataset and data loader settings
 datasets:
   train:
-    name: DIV2K
-    type: RealESRGANPairedDataset
-    dataroot_gt: datasets/DF2K/DIV2K_train_HR_sub/DIV2K_train_HR_sub/
-    dataroot_lq: datasets/DF2K/DIV2K_train_LR_bicubic_X4_sub/DIV2K_train_LR_bicubic_X4_sub/
-    meta_info: datasets/DF2K/meta_info/meta_info_DIV2K_sub_pair.txt
+    name: Saudi
+    type: RealESRGANPairedDataset_basicsr
+    dataroot_gt: datasets/NL
+    dataroot_lq: datasets/NL
+    meta_info: datasets/NL/meta_info/meta_info_NL_sub_pair.txt
     io_backend:
       type: disk
 
@@ -39,13 +39,13 @@ datasets:
     pin_memory: true
 
   # Uncomment these for validation
-  # val:
-  #   name: validation
-  #   type: PairedImageDataset
-  #   dataroot_gt: path_to_gt
-  #   dataroot_lq: path_to_lq
-  #   io_backend:
-  #     type: disk
+#   val:
+#     name: validation
+#     type: PairedImageDataset
+#     dataroot_gt: datasets/NL/val/BM
+#     dataroot_lq: datasets/NL/val/DMSP
+#     io_backend:
+#       type: disk
 
 # network structures
 network_g:
@@ -57,7 +57,7 @@ network_g:
   num_grow_ch: 32
 
 network_d:
-  type: UNetDiscriminatorSN
+  type: UNetDiscriminatorSN_basicsr
   num_in_ch: 3
   num_feat: 64
   skip_connection: True
@@ -90,11 +90,13 @@ train:
   scheduler:
     type: MultiStepLR
     #milestones: [400000]
-    milestones: [35000]
+#    milestones: [35000]
+    milestones: [100]
     gamma: 0.5
 
 #  total_iter: 35000
-  total_iter: 200000
+  total_iter: 100
+#  total_iter: 200000
   warmup_iter: -1  # no warm up
 
   # losses
@@ -126,25 +128,28 @@ train:
     fake_label_val: 0.0
     loss_weight: !!float 1e-1
 
+#  net_d_iters: 10
   net_d_iters: 1
   net_d_init_iters: 0
 
 # Uncomment these for validation
 # validation settings
-# val:
-#   val_freq: !!float 5e3
-#   save_img: True
-
-#   metrics:
-#     psnr: # metric name
-#       type: calculate_psnr
-#       crop_border: 4
-#       test_y_channel: false
+#  val:
+#    val_freq: 50
+#    save_img: True
+#
+#    metrics:
+#      #     - "PSNR"
+#      #     - "SSIM"
+#      #       type: calculate_psnr
+#      - type: PSNR
+#        crop_border: 4
+#        test_y_channel: false
 
 # logging settings
 logger:
-  print_freq: 100
-  save_checkpoint_freq: !!float 5e3
+  print_freq: 1
+  save_checkpoint_freq: 50
   use_tb_logger: true
   wandb:
     project: ~
